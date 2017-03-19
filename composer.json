@@ -19,7 +19,8 @@
     "gephart/event-manager": "0.2.*",
     "gephart/request": "0.2.*",
     "gephart/response": "0.2.*",
-    "gephart/routing": "0.2.*"
+    "gephart/routing": "0.2.*",
+    "twig/twig": "2.2.*"
   },
   "autoload": {
     "psr-4": { "Gephart\\Framework\\": "src/" },
