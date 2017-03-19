@@ -36,6 +36,12 @@
     ],
     "post-update-cmd": [
       "@gephart-scripts"
-    ]
+    ],
+    "post-package-install": [
+      "@gephart-scripts"
+    ],
+    "post-package-update": [
+      "@gephart-scripts"
+    ],
   }
 }
