@@ -26,5 +26,16 @@
     "exclude-from-classmap": [
       "/Tests/"
     ]
+  },
+  "scripts": {
+    "gephart-scripts": [
+      "Gephart\\Framework\\Composer\\Scripts::install"
+    ],
+    "post-install-cmd": [
+      "@gephart-scripts"
+    ],
+    "post-update-cmd": [
+      "@gephart-scripts"
+    ]
   }
 }

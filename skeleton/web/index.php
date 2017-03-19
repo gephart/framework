@@ -4,7 +4,7 @@ use Gephart\DependencyInjection\Container;
 use Gephart\Configuration\Configuration;
 use Gephart\Routing\Router;
 
-include_once __DIR__ . "/vendor/autoload.php";
+include_once __DIR__ . "/../vendor/autoload.php";
 
 $container = new Container();
 
