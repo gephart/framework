@@ -9,7 +9,7 @@ include_once __DIR__ . "/../vendor/autoload.php";
 $container = new Container();
 
 $configuration = $container->get(Configuration::class);
-$configuration->setDirectory(__DIR__ . "/config");
+$configuration->setDirectory(__DIR__ . "/../config");
 
 if(in_array($_SERVER['REMOTE_ADDR'], [
     '127.0.0.1',
