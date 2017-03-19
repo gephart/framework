@@ -15,10 +15,11 @@ class Debugger
 
     public function exceptionHandler(\Exception $exception)
     {
+        $message = htmlspecialchars($exception->getMessage());
         echo $this->templateHead();
         echo <<<EOL
             <header>
-                <h1>{$exception->getMessage()}</h1>
+                <h1>{$message}</h1>
                 <h2>{$exception->getFile()} at line <b>{$exception->getLine()}</b></h2>
             </header>
             <main>
@@ -27,7 +28,7 @@ EOL;
         foreach ($exception->getTrace() as $trace) {
             $args = implode("\",\"",$trace["args"]);
             if ($args != "") {
-                $args = "\"$args\"";
+                $args = "\"".htmlspecialchars($args)."\"";
             }
             echo <<<EOL
                 <tr>
@@ -43,6 +44,8 @@ EOL;
 
     public function errorHandler($errno, $errstr, $errfile, $errline)
     {
+        $errstr = htmlspecialchars($errstr);
+
         switch ($errno) {
             case E_USER_ERROR:
             case E_ERROR:
@@ -62,6 +65,7 @@ EOL;
             default:
                 $type = "UNKNOWN";
         }
+
         echo $this->templateHead();
         echo <<<EOL
 <header>
