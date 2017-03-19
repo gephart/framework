@@ -96,7 +96,6 @@
 <main>
     <aside>
         <ul>
-            <li><a href="#install">Install</a></li>
             <li><a href="#project-structure">Project structure</a></li>
             <li><a href="#routing">Routing</a></li>
             <li><a href="#controllers">Controllers</a></li>
@@ -106,13 +105,6 @@
         </ul>
     </aside>
     <div class="content">
-        <a id="install"></a><h3>Install</h3>
-        <p>
-            For instalation usign composer:
-        </p>
-        <pre><code class="console">composer install gephart/framework
-</code></pre>
-
         <a id="project-structure"></a><h3>Project structure</h3>
         <pre><code class="php">/config
 /src
