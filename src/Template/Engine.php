@@ -43,7 +43,7 @@ class Engine
             $options["auto_reload"] = true;
         }
 
-        $this->twig = new \Twig_Environment($loader, $options);
+        return new \Twig_Environment($loader, $options);
     }
 
     public function render(string $template, array $data = []): string
