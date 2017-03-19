@@ -1,0 +1,30 @@
+{
+  "name": "gephart/framework",
+  "type": "library",
+  "description": "Gephart Framework",
+  "keywords": [],
+  "homepage": "https://github.com/gephart/framework",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Michal Katuščák",
+      "email": "michal@katuscak.cz"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "gephart/annotation": "dev-master",
+    "gephart/configuration": "dev-master",
+    "gephart/dependency-injection": "dev-master",
+    "gephart/event-manager": "dev-master",
+    "gephart/request": "dev-master",
+    "gephart/response": "dev-master",
+    "gephart/routing": "dev-master"
+  },
+  "autoload": {
+    "psr-4": { "Gephart\\Framework\\": "src/" },
+    "exclude-from-classmap": [
+      "/Tests/"
+    ]
+  }
+}
