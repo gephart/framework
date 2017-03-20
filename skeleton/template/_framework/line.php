@@ -9,7 +9,12 @@
 
     <div class="_gf-line__box">
         <span class="_gf-line__box__title">
-            <strong><?=$actual_route->getController()?>::<?=$actual_route->getAction()?></strong>
+            <strong>
+                <?php if ($actual_route): ?>
+                    <?=$actual_route->getController()?>::<?=$actual_route->getAction()?></strong>
+                <?php else: ?>
+                    Unknown route
+                <?php endif; ?>
         </span>
     </div>
 
