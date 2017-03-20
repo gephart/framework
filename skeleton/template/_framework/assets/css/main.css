@@ -36,6 +36,10 @@
     float: left;
 }
 
+._gf-line__box--hand {
+    cursor: pointer;
+}
+
 ._gf-line__box--hover:hover {
     background: #333;
 }
@@ -57,6 +61,8 @@
     border-top: 1px #999 solid;
     border-left: 1px #999 solid;
     border-spacing: 0;
+    table-layout: auto;
+    color: #fff;
 }
 
 ._gf-line th,

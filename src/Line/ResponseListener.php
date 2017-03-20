@@ -2,9 +2,12 @@
 
 namespace Gephart\Framework\Line;
 
+use Gephart\Configuration\Configuration;
 use Gephart\EventManager\Event;
 use Gephart\EventManager\EventManager;
+use Gephart\Framework\Configuration\FrameworkConfiguration;
 use Gephart\Framework\Template\Engine;
+use Gephart\Request\Request;
 use Gephart\Routing\Router;
 
 class ResponseListener
@@ -25,6 +28,11 @@ class ResponseListener
     private $engine;
 
     /**
+     * @var Configuration
+     */
+    private $configuration;
+
+    /**
      * @var float
      */
     private $microtime;
@@ -32,13 +40,21 @@ class ResponseListener
     public function __construct(
         EventManager $event_manager,
         Router $router,
-        Engine $engine
+        Engine $engine,
+        FrameworkConfiguration $configuration,
+        Request $request
     )
     {
         $this->event_manager = $event_manager;
         $this->router = $router;
         $this->engine = $engine;
+        $this->configuration = $configuration;
         $this->microtime = microtime(true);
+
+        if ($request->get("_line-action") == "clear-cache") {
+            $this->requestClearCache();
+            exit;
+        }
 
         $event_manager->attach(Router::RESPONSE_RENDER_EVENT, [$this, "responseRender"]);
     }
@@ -68,5 +84,36 @@ class ResponseListener
             "listeners" => $listeners,
             "microtime" => $microtime
         ]);
+    }
+
+    private function requestClearCache()
+    {
+        $template_configuration = $this->configuration->get("template");
+        if (isset($template_configuration["twig"]) && !empty($template_configuration["twig"]["cache"])) {
+            $dir = $this->configuration->getDirectory() . "/../" . $template_configuration["twig"]["cache"];
+            try {
+                $this->deleteDir($dir, false);
+                echo "OK";
+            } catch (\Exception $exception) {
+                echo $exception->getMessage();
+            }
+        }
+    }
+
+    private function deleteDir($dir, $remove_self = true) {
+        $files = array_diff(scandir($dir), ['.','..']);
+
+        foreach ($files as $file) {
+            @chmod("$dir/$file", 0777);
+            if (is_dir("$dir/$file")) {
+                $this->deleteDir("$dir/$file");
+            } else {
+                @unlink("$dir/$file");
+            }
+        }
+
+        if ($remove_self) {
+            @rmdir($dir);
+        }
     }
 }
