@@ -104,7 +104,6 @@ class ResponseListener
         $files = array_diff(scandir($dir), ['.','..']);
 
         foreach ($files as $file) {
-            @chmod("$dir/$file", 0777);
             if (is_dir("$dir/$file")) {
                 $this->deleteDir("$dir/$file");
             } else {
@@ -113,6 +112,7 @@ class ResponseListener
         }
 
         if ($remove_self) {
+            @chmod("$dir", 0777);
             @rmdir($dir);
         }
     }
