@@ -2,50 +2,63 @@
 
 namespace Gephart\Framework\Debugging;
 
+use Gephart\EventManager\Event;
+use Gephart\EventManager\EventManager;
+use Gephart\Framework\Response\TemplateResponse;
+use Gephart\Routing\Router;
+
 class Debugger
 {
-    public function __construct()
+    /**
+     * @var TemplateResponse
+     */
+    private $response;
+
+    /**
+     * @var EventManager
+     */
+    private $event_manager;
+
+    public function __construct(TemplateResponse $response, EventManager $event_manager)
     {
+        $this->response = $response;
+        $this->event_manager = $event_manager;
+
         error_reporting(E_ALL);
         ini_set("display_error", 1);
 
+        set_error_handler([$this, "errorHandler"]);
         set_exception_handler([$this, "exceptionHandler"]);
-        set_error_handler([$this, "errorHandler"]);//echo $adasd;
     }
 
-    public function exceptionHandler(\Exception $exception)
+    public function exceptionHandler($exception)
     {
-        $message = htmlspecialchars($exception->getMessage());
-        echo $this->templateHead();
-        echo <<<EOL
-            <header>
-                <h1>{$message}</h1>
-                <h2>{$exception->getFile()} at line <b>{$exception->getLine()}</b></h2>
-            </header>
-            <main>
-EOL;
-        echo "<table>";
-        foreach ($exception->getTrace() as $trace) {
-            $args = implode("\",\"",$trace["args"]);
-            if ($args != "") {
-                $args = "\"".htmlspecialchars($args)."\"";
-            }
-            echo <<<EOL
-                <tr>
-                    <td>{$trace["class"]}::{$trace["function"]}($args)</td>
-                    <td>{$trace["file"]} at line <b>{$trace["line"]}</b></td>
-                </tr>
-EOL;
-        }
-        echo "</table>";
-        echo $this->templateFoot();
+        $type = get_class($exception);
+        $errstr = $exception->getMessage();
+        $errfile = $exception->getFile();
+        $errline = $exception->getLine();
+
+        $file = file_get_contents($exception->getFile());
+
+        $traces = explode("\n", $exception->getTraceAsString());
+
+        $response = $this->response->template("_framework/error/exception.html.twig", [
+            "file" => $file,
+            "type" => $type,
+            "errstr" => $errstr,
+            "errfile" => $errfile,
+            "errline" => $errline,
+            "traces" => $traces
+        ])->render();
+
+        $response = $this->triggerReponseEvent($response);
+
+        echo $response;
         exit;
     }
 
     public function errorHandler($errno, $errstr, $errfile, $errline)
     {
-        $errstr = htmlspecialchars($errstr);
-
         switch ($errno) {
             case E_USER_ERROR:
             case E_ERROR:
@@ -66,93 +79,30 @@ EOL;
                 $type = "UNKNOWN";
         }
 
-        echo $this->templateHead();
-        echo <<<EOL
-<header>
-    <h1>{$type}: {$errstr}</h1>
-    <h2>{$errfile} at line <b>{$errline}</b></h2>
-</header>
-<main>
-EOL;
-        echo $this->templateFoot();
+        $file = file_get_contents($errfile);
+
+        $response = $this->response->template("_framework/error/error.html.twig", [
+            "file" => $file,
+            "type" => $type,
+            "errstr" => $errstr,
+            "errfile" => $errfile,
+            "errline" => $errline
+        ])->render();
+
+        $response = $this->triggerReponseEvent($response);
+
+        echo $response;
         exit;
     }
 
-    public function templateHead() {
-        return <<<EOL
-<!doctype html>
-<html>
-<head>
-    <title>PROBLEM - Gephart - PHP framework</title>
-    <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700|Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: "Raleway";
-            color: #222;
-        }
-        code {
-            font-family: "Inconsolata";
-        }
-        header {
-            text-align: center;
-            background: red;
-            color: #fff;
-            padding: 50px 24px;
-            position: relative;
-        }
-        header:before {
-            content: '';
-            position: absolute;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background: rgba(0,0,0,.5);
-        }
-        main {
-            padding: 24px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        h1,h2 {
-            position: relative;
-        }
-        h1 {
-            font-size: 46px;
-            font-weight: 900;
-            margin-bottom: 24px;
-        }
-        h2 {
-            font-weight: 100;
-            font-size: 24px
-        }
-        table {
-            border-collapse: collapse;
-            border-top: 1px #ddd solid;
-            border-left: 1px #ddd solid;
-        }
-        td {
-            border-right: 1px #ddd solid;
-            border-bottom: 1px #ddd solid;
-            padding: 5px 10px;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-EOL;
-    }
-
-    public function templateFoot()
+    private function triggerReponseEvent($response)
     {
-        return <<<EOL
-            </main>
-            </body>
-        </html>
-EOL;
+        $event = new Event();
+        $event->setName(Router::RESPONSE_RENDER_EVENT);
+        $event->setParams([
+            "response" => $response
+        ]);
+        $this->event_manager->trigger($event);
+        return $event->getParam("response");
     }
 }
