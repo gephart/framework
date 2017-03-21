@@ -2,19 +2,23 @@
 <html>
 <head>
     <title>Gephart - PHP framework</title>
-    <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700|Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700|Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
         }
+
         body {
             font-family: "Raleway";
             color: #222;
         }
+
         code {
             font-family: "Inconsolata";
         }
+
         header {
             text-align: center;
             background: url('data:image/jpeg;base64,<?=base64_encode(file_get_contents(__DIR__."/assets/img/background.jpg"))?>') no-repeat center center / cover;
@@ -23,57 +27,69 @@
             padding: 100px 24px;
             position: relative;
         }
+
         header:before {
             content: '';
             position: absolute;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background: rgba(0,0,0,.5);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .5);
         }
+
         main {
             padding: 24px;
             max-width: 900px;
             margin: 0 auto;
         }
+
         aside {
             width: 200px;
             float: right;
         }
+
         .content {
             width: calc(100% - 200px);
         }
+
         p, h3, h4, pre, ul {
             margin-bottom: 24px;
             line-height: 1.5em;
             font-size: 16px;
         }
+
         code {
-            padding: 12px!important;
-            background: #eee!important;
+            padding: 12px !important;
+            background: #eee !important;
             overflow: auto;
         }
-        h1,h2 {
+
+        h1, h2 {
             position: relative;
         }
+
         h1 {
             font-size: 72px;
             font-weight: 900;
             margin-bottom: 24px;
         }
+
         h2 {
             font-weight: 100;
             font-size: 32px
         }
+
         h3 {
             font-size: 24px;
             border-bottom: 1px #222 solid;
         }
+
         ul {
             margin-left: 24px;
             list-style: none;
         }
+
         ul a {
             color: #4078f2;
             text-shadow: 1px 0 0 #fff, 0 1px 0 #fff, 1px 1px 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff, -1px 1px 0 #fff;
@@ -83,6 +99,7 @@
             background-position: left bottom 1px;
             background-size: 100% 1px;
         }
+
         ul ul {
             margin-left: 18px;
         }
@@ -105,7 +122,8 @@
         </ul>
     </aside>
     <div class="content">
-        <a id="project-structure"></a><h3>Project structure</h3>
+        <a id="project-structure"></a>
+        <h3>Project structure</h3>
         <pre><code class="php">/config
 /src
     /App
@@ -125,7 +143,8 @@
 composer.json
 </code></pre>
 
-        <a id="routing"></a><h3>Routing</h3>
+        <a id="routing"></a>
+        <h3>Routing</h3>
 
         <h4>.htaccess</h4>
         <pre><code class="htaccess">RewriteEngine On
@@ -267,18 +286,27 @@ class DefaultController
 }</code></pre>
 
 
-        <a id="controllers"></a><h3>Controllers</h3>
+        <a id="controllers"></a>
+        <h3>Controllers</h3>
 
         <p>Controllers in section Routing or Templates</p>
 
-        <a id="templates"></a><h3>Templates</h3>
+        <a id="templates"></a>
+        <h3>Templates</h3>
 
         <h4>config/framework.json</h4>
         <pre><code class="json">{
-    "template": {
-        "dir": "template/"
+  "template": {
+    "dir": "template/",
+    "twig": {
+      "cache": "cache/twig/"
     }
+  }
 }</code></pre>
+
+        <h4>cache/twig/</h4>
+
+        <p>Directory must have permission for write.</p>
 
         <h4>src/App/Controller/DefaultController.php</h4>
         <pre><code class="php">&lt;?php
@@ -305,10 +333,14 @@ final class DefaultController
      */
     public function index() {
         return $this->response->template("_framework/default.php");
+
+        // Or twig template
+        // return $this->response->template("_framework/default.html.twig");
     }
 }</code></pre>
 
-        <a id="dependency-injection"></a><h3>Dependency injection</h3>
+        <a id="dependency-injection"></a>
+        <h3>Dependency injection</h3>
 
         <p>Usign:
         <pre><code class="php">class A
@@ -345,11 +377,12 @@ $b = $container-&gt;get(B::class);
 $b-&gt;render(); // hello world
 </code></pre>
 
-        <a id="event-manager"></a><h3>Event manager</h3>
+        <a id="event-manager"></a>
+        <h3>Event manager</h3>
 
 
         <p>Rendered string from Response() has event Router::RESPONSE_RENDER_EVENT.
-            <p>Registering listener in main file:
+        <p>Registering listener in main file:
 
         <h4>index.php</h4>
 
