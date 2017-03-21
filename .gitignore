@@ -1,2 +1,7 @@
 vendor/
 composer.lock
+
+/Tests/cache/skeleton/*
+/Tests/cache/twig/*
+!/Tests/cache/skeleton/.gitkeep
+!/Tests/cache/twig/.gitkeep
