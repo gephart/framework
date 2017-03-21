@@ -1,0 +1,8 @@
+{
+  "template": {
+    "dir": "../skeleton/template/",
+    "twig": {
+      "cache": "cache/twig/"
+    }
+  }
+}

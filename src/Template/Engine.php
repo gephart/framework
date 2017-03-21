@@ -26,6 +26,28 @@ class Engine
         }
     }
 
+    public function render(string $template, array $data = []): string
+    {
+        if ($this->twig && substr($template,-5) == ".twig") {
+            return $this->twig->render($template, $data);
+        } else {
+            $_template = $this->configuration->getDirectory() . "/../"
+                . $this->configuration->get("template")["dir"]
+                . $template;
+
+            foreach ($data as $key => $value) {
+                $$key = $value;
+            }
+
+            ob_start();
+            include $_template;
+            $result = ob_get_contents();
+            ob_end_clean();
+
+            return $result;
+        }
+    }
+
     private function getTwig()
     {
         $template = $this->configuration->get("template");
@@ -44,27 +66,5 @@ class Engine
         }
 
         return new \Twig_Environment($loader, $options);
-    }
-
-    public function render(string $template, array $data = []): string
-    {
-        if ($this->twig && substr($template,-5) == ".twig") {
-            return $this->twig->render($template, $data);
-        } else {
-            $_template = $this->configuration->getDirectory() . "/../"
-                . $this->configuration->get("template")["dir"]
-                . $template;
-
-            foreach ($data as $key => $value) {
-                $$key = $value;
-            }
-
-            ob_start();
-            include_once $_template;
-            $result = ob_get_contents();
-            ob_end_clean();
-
-            return $result;
-        }
     }
 }

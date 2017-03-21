@@ -4,17 +4,20 @@ namespace Gephart\Framework\Composer;
 
 class Scripts
 {
+    static public $skeleton_dir;
+    static public $target_dir;
+
     public static function install()
     {
+        self::$skeleton_dir = __DIR__ . "/../../skeleton";
+        self::$target_dir = ".";
+
         self::copySkeleton();
     }
 
     public static function copySkeleton()
     {
-        $from = __DIR__ . "/../../skeleton";
-        $to = ".";
-
-        self::copyDir($from, $to);
+        self::copyDir(self::$skeleton_dir, self::$target_dir);
     }
 
     public static function copyDir($from, $to)
@@ -28,7 +31,7 @@ class Scripts
                 if ($entry == "." || $entry == "..") continue;
 
                 if (is_dir($from . "/" . $entry)) {
-                    @mkdir($to . "/" . $entry);
+                    @mkdir($to . "/" . $entry, 0777);
                     echo "Create directory: ". $to . "/" . $entry . PHP_EOL;
                     self::copyDir($from . "/" . $entry, $to  . "/" . $entry);
                 } else {
