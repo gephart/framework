@@ -28,12 +28,12 @@ class Engine
 
     public function render(string $template, array $data = []): string
     {
+        $data = array_merge($this->getBasicVariables(), $data);
+
         if ($this->twig && substr($template,-5) == ".twig") {
             return $this->twig->render($template, $data);
         } else {
-            $_template = $this->configuration->getDirectory() . "/../"
-                . $this->configuration->get("template")["dir"]
-                . $template;
+            $_template = $this->getTemplateDir() . $template;
 
             foreach ($data as $key => $value) {
                 $$key = $value;
@@ -50,10 +50,7 @@ class Engine
 
     private function getTwig()
     {
-        $template = $this->configuration->get("template");
-        $main_dir = $this->configuration->getDirectory() . "/../";
-
-        $template_dir = $main_dir . $template["dir"];
+        $template_dir = $this->getTemplateDir();
 
         $loader = new \Twig_Loader_Filesystem($template_dir);
 
@@ -65,6 +62,39 @@ class Engine
             $options["auto_reload"] = true;
         }
 
-        return new \Twig_Environment($loader, $options);
+        $twig = new \Twig_Environment($loader, $options);
+
+        $this->registerBasicFunctions($twig);
+
+        return $twig;
+    }
+
+    private function registerBasicFunctions(\Twig_Environment $twig)
+    {
+        $base64_encode = new \Twig_SimpleFunction('base64_encode', function ($string) {
+            return base64_encode($string);
+        });
+
+        $file_get_contents = new \Twig_SimpleFunction('file_get_contents', function ($string) {
+            return file_get_contents($string);
+        });
+
+        $twig->addFunction($base64_encode);
+        $twig->addFunction($file_get_contents);
+    }
+
+    private function getBasicVariables()
+    {
+        return [
+            "_template_dir" => $this->getTemplateDir()
+        ];
+    }
+
+    private function getTemplateDir()
+    {
+        $template = $this->configuration->get("template");
+        $main_dir = $this->configuration->getDirectory() . "/../";
+
+        return $main_dir . $template["dir"];
     }
 }
