@@ -11,7 +11,7 @@ class ResponseListenerTest extends \PHPUnit\Framework\TestCase
         $container = new \Gephart\DependencyInjection\Container();
         $configuration = $container->get(\Gephart\Configuration\Configuration::class);
         $configuration->setDirectory(__DIR__ . "/../config/");
-        $container->get(\Gephart\Framework\Line\ResponseListener::class);
+        $container->get(\Gephart\Framework\Line\EventListener\ResponseListener::class);
 
         $this->container = $container;
     }

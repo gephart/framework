@@ -11,7 +11,6 @@ class TemplateResponseTest extends \PHPUnit\Framework\TestCase
         $container = new \Gephart\DependencyInjection\Container();
         $configuration = $container->get(\Gephart\Configuration\Configuration::class);
         $configuration->setDirectory(__DIR__ . "/../engine-files/config/");
-        $container->get(\Gephart\Framework\Line\ResponseListener::class);
 
         $this->response = $container->get(\Gephart\Framework\Response\TemplateResponse::class);
     }
