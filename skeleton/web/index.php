@@ -16,7 +16,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], [
     '::1'
 ])){
     $container->get(\Gephart\Framework\Debugging\Debugger::class);
-    $container->get(\Gephart\Framework\Line\ResponseListener::class);
+    $container->get(\Gephart\Framework\Line\EventListener\ResponseListener::class);
 }
 
 $router = $container->get(Router::class);
