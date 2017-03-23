@@ -60,18 +60,31 @@ class LineController
         }
     }
 
+    public function unregisterExtension(string $extension_classname)
+    {
+        foreach ($this->extensions as $key => $extension) {
+            if ($extension instanceof $extension_classname) {
+                unset($this->extensions[$key]);
+            }
+        }
+    }
+
     public function getLine()
     {
         $extensions = $this->extensions;
-        usort($extensions, function (ExtensionInterface $a, ExtensionInterface $b){
+        usort($extensions, function (ExtensionInterface $a, ExtensionInterface $b) {
             if ($a->getPriority() < $b->getPriority()) {
                 return true;
             }
             return false;
         });
 
-        $base64_encode = function ($string) {return base64_encode($string);};
-        $file_get_contents = function ($string) {return file_get_contents($string);};
+        $base64_encode = function ($string) {
+            return base64_encode($string);
+        };
+        $file_get_contents = function ($string) {
+            return file_get_contents($string);
+        };
 
         return $this->engine->render("_framework/line.html.twig", [
             "extensions" => $extensions,
