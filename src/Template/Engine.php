@@ -55,8 +55,9 @@ class Engine
         $loader = new \Twig_Loader_Filesystem($template_dir);
 
         $options = [];
+        $template = $this->configuration->get("template");
         if (!empty($template["twig"]["cache"])) {
-            $cache = $main_dir . $template["twig"]["cache"];
+            $cache = $this->getCacheDir();
 
             $options["cache"] = $cache;
             $options["auto_reload"] = true;
@@ -96,5 +97,13 @@ class Engine
         $main_dir = $this->configuration->getDirectory() . "/../";
 
         return $main_dir . $template["dir"];
+    }
+
+    private function getCacheDir()
+    {
+        $template = $this->configuration->get("template");
+        $main_dir = $this->configuration->getDirectory() . "/../";
+
+        return $main_dir . $template["twig"]["cache"];
     }
 }
