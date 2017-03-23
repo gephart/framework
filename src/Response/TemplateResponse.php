@@ -1,45 +1,109 @@
 <?php
 
-namespace Gephart\Framework\Response;
+namespace Gephart\Framework\Template;
 
 use Gephart\Framework\Configuration\FrameworkConfiguration;
-use Gephart\Framework\Template\Engine;
-use Gephart\Response\ResponseInterface;
 
-class TemplateResponse implements ResponseInterface
+class Engine
 {
+    /**
+     * @var FrameworkConfiguration
+     */
+    private $configuration;
 
     /**
-     * @var string
+     * @var \Twig_Environment
      */
-    private $template;
+    private $twig;
 
-    /**
-     * @var array
-     */
-    private $data;
-
-    /**
-     * @var Engine
-     */
-    private $engine;
-
-    public function __construct(Engine $engine)
+    public function __construct(FrameworkConfiguration $configuration)
     {
-        $this->engine = $engine;
+        $this->configuration = $configuration;
+
+        $template = $this->configuration->get("template");
+        if (isset($template["twig"])) {
+            $this->twig = $this->getTwig();
+        }
     }
 
-    public function template(string $template, array $data = [])
+    public function render(string $template, array $data = []): string
     {
-        $this->template = $template;
-        $this->data = $data;
+        $data = array_merge($this->getBasicVariables(), $data);
 
-        return $this;
+        if ($this->twig && substr($template,-5) == ".twig") {
+            return $this->twig->render($template, $data);
+        } else {
+            $_template = $this->getTemplateDir() . $template;
+
+            foreach ($data as $key => $value) {
+                $$key = $value;
+            }
+
+            ob_start();
+            include $_template;
+            $result = ob_get_contents();
+            ob_end_clean();
+
+            return $result;
+        }
     }
 
-    public function render()
+    private function getTwig()
     {
-        return $this->engine->render($this->template, $this->data);
+        $template_dir = $this->getTemplateDir();
+
+        $loader = new \Twig_Loader_Filesystem($template_dir);
+
+        $options = [];
+        $template = $this->configuration->get("template");
+        if (!empty($template["twig"]["cache"])) {
+            $cache = $this->getCacheDir();
+
+            $options["cache"] = $cache;
+            $options["auto_reload"] = true;
+        }
+
+        $twig = new \Twig_Environment($loader, $options);
+
+        $this->registerBasicFunctions($twig);
+
+        return $twig;
     }
 
+    private function registerBasicFunctions(\Twig_Environment $twig)
+    {
+        $base64_encode = new \Twig_SimpleFunction('base64_encode', function ($string) {
+            return base64_encode($string);
+        });
+
+        $file_get_contents = new \Twig_SimpleFunction('file_get_contents', function ($string) {
+            return file_get_contents($string);
+        });
+
+        $twig->addFunction($base64_encode);
+        $twig->addFunction($file_get_contents);
+    }
+
+    private function getBasicVariables()
+    {
+        return [
+            "_template_dir" => $this->getTemplateDir()
+        ];
+    }
+
+    private function getTemplateDir()
+    {
+        $template = $this->configuration->get("template");
+        $main_dir = $this->configuration->getDirectory() . "/../";
+
+        return $main_dir . $template["dir"];
+    }
+
+    private function getCacheDir()
+    {
+        $template = $this->configuration->get("template");
+        $main_dir = $this->configuration->getDirectory() . "/../";
+
+        return $main_dir . $template["twig"]["cache"];
+    }
 }
