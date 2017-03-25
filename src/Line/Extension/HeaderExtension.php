@@ -2,8 +2,6 @@
 
 namespace Gephart\Framework\Line\Extension;
 
-use Gephart\Routing\Router;
-
 class HeaderExtension implements ExtensionInterface
 {
     public function __construct()
@@ -22,6 +20,8 @@ class HeaderExtension implements ExtensionInterface
 
     public function getContent()
     {
+        flush();
+
         $content = "<table>";
 
         foreach (headers_list() as $header):
