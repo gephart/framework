@@ -4,10 +4,6 @@ namespace Gephart\Framework\Line\Extension;
 
 class HeaderExtension implements ExtensionInterface
 {
-    public function __construct()
-    {
-    }
-
     public function getAlign()
     {
         return "right";

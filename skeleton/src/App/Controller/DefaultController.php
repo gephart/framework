@@ -19,9 +19,8 @@ final class DefaultController
 
     /**
      * @Route /
-     * @return TemplateResponse
      */
     public function index() {
-        return $this->response->template("_framework/default.php");
+        return $this->response->template("_framework/default.html.twig");
     }
 }

@@ -3,6 +3,7 @@
 namespace Gephart\Framework\Template;
 
 use Gephart\Framework\Configuration\FrameworkConfiguration;
+use Gephart\Routing\Router;
 
 class Engine
 {
@@ -12,13 +13,19 @@ class Engine
     private $configuration;
 
     /**
+     * @var Router
+     */
+    private $router;
+
+    /**
      * @var \Twig_Environment
      */
     private $twig;
 
-    public function __construct(FrameworkConfiguration $configuration)
+    public function __construct(FrameworkConfiguration $configuration, Router $router)
     {
         $this->configuration = $configuration;
+        $this->router = $router;
 
         $template = $this->configuration->get("template");
         if (isset($template["twig"])) {
@@ -87,8 +94,18 @@ class Engine
     private function getBasicVariables()
     {
         return [
-            "_template_dir" => $this->getTemplateDir()
+            "_template_dir" => $this->getTemplateDir(),
+            "_router" => $this->router,
+            "_base_uri" => $this->getBaseUri()
         ];
+    }
+
+    private function getBaseUri(): string
+    {
+        if (!empty($_SERVER["HTTP_HOST"])) {
+            return "//".$_SERVER["HTTP_HOST"].str_replace("index.php","",$_SERVER["SCRIPT_NAME"]);
+        }
+        return "";
     }
 
     private function getTemplateDir()
