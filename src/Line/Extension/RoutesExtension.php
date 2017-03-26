@@ -36,6 +36,7 @@ class RoutesExtension implements ExtensionInterface
                     <th>Rule</th>
                     <th>Action</th>
                     <th>Name</th>
+                    <th>Priority</th>
                 </tr>
         ";
 
@@ -45,6 +46,7 @@ class RoutesExtension implements ExtensionInterface
                     <td>".$route->getRule()."</td>
                     <td>".$route->getController()."::".$route->getAction()."</td>
                     <td>".$route->getName()."</td>
+                    <td>".$route->getPriority()."</td>
                 </tr>
             ";
         endforeach;
