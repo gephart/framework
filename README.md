@@ -15,7 +15,7 @@ Dependencies
  - gephart/request >= 0.2.*
  - gephart/response >= 0.2.*
  - gephart/routing >= 0.2.*
- - gephart/sessions >= 0.2.*
+ - gephart/sessions >= 0.3.*
  - twig/twig >= 2.2.*"
 
 Instalation
