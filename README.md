@@ -10,6 +10,8 @@ Dependencies
  - gephart/configuration >= 0.2.*
  - gephart/dependency-injection >= 0.2.*
  - gephart/event-manager >= 0.2.*
+ - gephart/language >= 0.3.*
+ - gephart/orm >= 0.3.*
  - gephart/request >= 0.2.*
  - gephart/response >= 0.2.*
  - gephart/routing >= 0.2.*
