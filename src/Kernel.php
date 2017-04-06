@@ -5,6 +5,7 @@ namespace Gephart\Framework;
 use Gephart\Configuration\Configuration;
 use Gephart\DependencyInjection\Container;
 use Gephart\EventManager\EventManager;
+use Gephart\Framework\EventListener\SecurityListener;
 use Gephart\Routing\Router;
 
 class Kernel
@@ -41,7 +42,11 @@ class Kernel
         $this->eventManager = $this->container->get(EventManager::class);
 
         $this->autodetectEnvironment();
-        $this->setConfiguration(realpath(__DIR__ . "/../../../../config"));
+
+        $config_dir = realpath(__DIR__ . "/../../../../config");
+        if (is_dir($config_dir)) {
+            $this->setConfiguration($config_dir);
+        }
     }
 
     public function setConfiguration(string $dir)
@@ -71,6 +76,10 @@ class Kernel
             \Gephart\Framework\Debugging\Debugger::class,
             \Gephart\Framework\Line\EventListener\ResponseListener::class
         ], self::DEV_ENVIRONMENT);
+
+        $this->registerServices([
+            SecurityListener::class
+        ]);
 
         $router = $this->container->get(Router::class);
         $router->run();
