@@ -12,6 +12,7 @@ use Gephart\Framework\Line\Extension\HeaderExtension;
 use Gephart\Framework\Line\Extension\ListenersExtension;
 use Gephart\Framework\Line\Extension\ListenersExtenstion;
 use Gephart\Framework\Line\Extension\RoutesExtension;
+use Gephart\Framework\Line\Extension\SecurityExtension;
 use Gephart\Framework\Line\Extension\TimerExtension;
 use Gephart\Framework\Line\Extension\TimerExtenstion;
 use Gephart\Framework\Template\Engine;
@@ -49,6 +50,7 @@ class LineController
         $this->registerExtension(CacheExtension::class);
         $this->registerExtension(ListenersExtension::class);
         $this->registerExtension(TimerExtension::class);
+        $this->registerExtension(SecurityExtension::class);
     }
 
     public function registerExtension(string $extension_classname)

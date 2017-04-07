@@ -57,6 +57,11 @@
     display: block;
 }
 
+._gf-line__box__hover a {
+    color: #fff;
+    text-decoration: underline;
+}
+
 ._gf-line table {
     border-top: 1px #999 solid;
     border-left: 1px #999 solid;
