@@ -71,7 +71,7 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
             $_GET["_route"] = "test/security";
             $kernel->run();
             $test = true;
-        } catch (Exception $exception) {echo $exception->getMessage();}
+        } catch (Exception $exception) {}
 
         $this->assertTrue($test);
     }

@@ -87,8 +87,13 @@ class Engine
             return file_get_contents($string);
         });
 
+        $md5 = new \Twig_SimpleFunction('md5', function ($string) {
+            return md5($string);
+        });
+
         $twig->addFunction($base64_encode);
         $twig->addFunction($file_get_contents);
+        $twig->addFunction($md5);
     }
 
     private function getBasicVariables()
