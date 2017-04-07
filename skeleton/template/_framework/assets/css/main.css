@@ -50,6 +50,7 @@
     right: -1px;
     background: #333;
     padding: 10px;
+    overflow: auto;
     display: none;
 }
 
