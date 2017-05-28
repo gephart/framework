@@ -34,7 +34,7 @@ class Scripts
                     @mkdir($to . "/" . $entry, 0777);
                     echo "Create directory: ". $to . "/" . $entry . PHP_EOL;
                     self::copyDir($from . "/" . $entry, $to  . "/" . $entry);
-                } elseif (!file_exists($from . "/" . $entry)) {
+                } elseif (!file_exists($to . "/" . $entry)) {
                     $file = file_get_contents($from . "/" . $entry);
                     file_put_contents($to . "/" . $entry, $file);
                     echo "Create file: ". $to . "/" . $entry . PHP_EOL;
