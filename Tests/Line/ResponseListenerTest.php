@@ -13,6 +13,10 @@ class ResponseListenerTest extends \PHPUnit\Framework\TestCase
         $configuration->setDirectory(__DIR__ . "/../config/");
         $container->get(\Gephart\Framework\Line\EventListener\ResponseListener::class);
 
+        /** @var \Gephart\Quality\Checker $quality_checker */
+        $quality_checker = $container->get(\Gephart\Quality\Checker::class);
+        $quality_checker->setDir(__DIR__ . "/../../src");
+
         $this->container = $container;
     }
 

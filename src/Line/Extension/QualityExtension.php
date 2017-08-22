@@ -2,6 +2,7 @@
 
 namespace Gephart\Framework\Line\Extension;
 
+use Gephart\Configuration\Configuration;
 use Gephart\Quality\Checker;
 use Gephart\Quality\Entity\ClassQuality;
 
@@ -18,9 +19,9 @@ class QualityExtension implements ExtensionInterface
      */
     private $cache_dir;
 
-    public function __construct(Checker $quality_checker)
+    public function __construct(Checker $quality_checker, Configuration $configuration)
     {
-        $root_dir = realpath(__DIR__ . "/../../../../../..");
+        $root_dir = realpath($configuration->getDirectory() . "/..");
         $this->quality_checker = $quality_checker;
         $this->quality_checker->setDir($root_dir . "/src");
         $this->cache_dir = $root_dir . "/cache";
