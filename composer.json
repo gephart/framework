@@ -12,11 +12,12 @@
     }
   ],
   "require": {
-    "php": ">=7.0",
+    "php": ">=7.1",
     "gephart/annotation": "0.2.*",
     "gephart/configuration": "0.2.*",
     "gephart/dependency-injection": "0.2.*",
     "gephart/event-manager": "0.2.*",
+    "gephart/quality": "~0.1",
     "gephart/language": "0.3.*",
     "gephart/orm": "0.3.*",
     "gephart/request": "0.2.*",
@@ -24,7 +25,7 @@
     "gephart/routing": "0.3.*",
     "gephart/security": "0.3.*",
     "gephart/sessions": "0.3.*",
-    "twig/twig": "2.2.*"
+    "twig/twig": "~2.4.3"
   },
   "autoload": {
     "psr-4": { "Gephart\\Framework\\": "src/" },
