@@ -21,8 +21,10 @@ class QualityExtension implements ExtensionInterface
 
     public function __construct(Checker $quality_checker, Configuration $configuration)
     {
-        $root_dir = realpath($configuration->getDirectory() . "/..");
         $this->quality_checker = $quality_checker;
+
+        $root_dir = realpath($configuration->getDirectory() . "/../");
+
         $this->quality_checker->setDir($root_dir . "/src");
         $this->cache_dir = $root_dir . "/cache";
     }
@@ -126,6 +128,11 @@ class QualityExtension implements ExtensionInterface
         return $worst_quality;
     }
 
+    /**
+     * @param string $file
+     * @param callable $param
+     * @return ClassQuality[]
+     */
     private function fromCache(string $file, callable $param)
     {
         $cache_file = $this->cache_dir . "/" . $file;
