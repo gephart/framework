@@ -9,6 +9,7 @@
     bottom: 0;
     width:100%;
     background: rgba(20,20,20,.95);
+    background: linear-gradient(#333, #111);
     padding: 0 10px;
     height: 32px;
     color: #fff;
@@ -83,7 +84,7 @@
     position: relative;
     border-left: 1px #333 solid;
     height: 32px;
-    padding: 0 6px;
+    padding: 0 10px;
 }
 
 ._gf-line__box__title {
