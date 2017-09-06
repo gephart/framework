@@ -46,7 +46,51 @@ class QualityExtension implements ExtensionInterface
 
     public function getContent()
     {
-        return false;
+        $classes_quality = $this->fromCache("classes_quality.ini", function() {
+            return $this->quality_checker->getQuality();
+        });
+
+        $content = "
+            <table>
+                <tr>
+                    <th>Class</th>
+                    <th>Issues</th>
+                    <th>Quality</th>
+                </tr>
+        ";
+
+        foreach ($classes_quality as $class_quality) {
+            $issues = $class_quality->getIssues();
+
+            if (count($issues) === 0) continue;
+
+            $issues_list = "";
+            foreach ($issues as $issue) {
+                $name = $issue->getName();
+                $metric = $issue->getMetric();
+                $type = $issue->getType();
+                $expected = $issue->getExpected();
+                $given = $issue->getGiven();
+
+                if ($type == "method") {
+                    $type .= " <em>$name</em>";
+                }
+
+                $issues_list .= "<div style='white-space:nowrap'><strong>$metric</strong> of <strong>$type</strong> should be maximally <strong>$expected</strong>, given <strong>$given</strong>.</div>";
+            }
+
+            $content .= "
+                <tr>
+                    <td>".$class_quality->getClassName()."</td>
+                    <td>$issues_list</td>
+                    <td>".$class_quality->getPercent()."%</td>
+                </tr>
+            ";
+        }
+
+        $content .= "</table>";
+
+        return $content;
     }
 
     public function getIcon()
