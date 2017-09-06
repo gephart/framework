@@ -150,6 +150,8 @@ END;
             } catch (\Exception $exception) {
                 echo $exception->getMessage();
             }
+
+            @unlink($dir."/../classes_quality.ini");
         }
 
         exit;
