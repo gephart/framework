@@ -90,6 +90,10 @@ class QualityExtension implements ExtensionInterface
 
         $content .= "</table>";
 
+        if (isset($issues_list)) {
+            return $content;
+        }
+
         return $content;
     }
 
