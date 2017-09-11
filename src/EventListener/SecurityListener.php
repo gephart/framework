@@ -55,7 +55,7 @@ class SecurityListener
 
         if ($must_have_role && !$this->authenticator->isGranted($must_have_role)) {
             $login = $this->security_configuration->get("login");
-            if ($login) {
+            if ($login && !$this->authenticator->getUser()) {
                 $url = $this->router->generateUrl($login);
                 @header("location: $url");
                 exit;
