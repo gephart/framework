@@ -36,7 +36,7 @@ class QualityExtension implements ExtensionInterface
 
     public function getTitle()
     {
-        $classes_quality = $this->fromCache("classes_quality.ini", function() {
+        $classes_quality = $this->fromCache("classes_quality.ini", function () {
             return $this->quality_checker->getQuality();
         });
 
@@ -46,7 +46,7 @@ class QualityExtension implements ExtensionInterface
 
     public function getContent()
     {
-        $classes_quality = $this->fromCache("classes_quality.ini", function() {
+        $classes_quality = $this->fromCache("classes_quality.ini", function () {
             return $this->quality_checker->getQuality();
         });
 
@@ -62,7 +62,9 @@ class QualityExtension implements ExtensionInterface
         foreach ($classes_quality as $class_quality) {
             $issues = $class_quality->getIssues();
 
-            if (count($issues) === 0) continue;
+            if (count($issues) === 0) {
+                continue;
+            }
 
             $issues_list = "";
             foreach ($issues as $issue) {

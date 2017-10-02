@@ -41,5 +41,4 @@ class TemplateResponse implements ResponseInterface
     {
         return $this->engine->render($this->template, $this->data);
     }
-
 }

@@ -27,6 +27,9 @@
     "gephart/sessions": "0.4.*",
     "twig/twig": "~2.4.3"
   },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "3.*"
+  },
   "autoload": {
     "psr-4": { "Gephart\\Framework\\": "src/" },
     "exclude-from-classmap": [

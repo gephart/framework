@@ -37,7 +37,7 @@ class Engine
     {
         $data = array_merge($this->getBasicVariables(), $data);
 
-        if ($this->twig && substr($template,-5) == ".twig") {
+        if ($this->twig && substr($template, -5) == ".twig") {
             return $this->twig->render($template, $data);
         } else {
             $_template = $this->getTemplateDir() . $template;
@@ -108,7 +108,7 @@ class Engine
     private function getBaseUri(): string
     {
         if (!empty($_SERVER["HTTP_HOST"])) {
-            return "//".$_SERVER["HTTP_HOST"].str_replace("index.php","",$_SERVER["SCRIPT_NAME"]);
+            return "//".$_SERVER["HTTP_HOST"].str_replace("index.php", "", $_SERVER["SCRIPT_NAME"]);
         }
         return "";
     }
