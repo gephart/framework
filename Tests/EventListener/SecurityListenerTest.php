@@ -3,11 +3,14 @@
 include_once __DIR__ . "/../../vendor/autoload.php";
 
 
-class TestResponse implements \Gephart\Response\ResponseInterface
+class TestResponse extends \Gephart\Http\Response
 {
-    public function render()
+    public function __construct()
     {
-        return "";
+        $stream = new \Gephart\Http\Stream("php://temp","rw");
+        $stream->write("");
+
+        parent::__construct($stream);
     }
 }
 
@@ -44,12 +47,13 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testSecurityBad()
     {
-        $kernel = new \Gephart\Framework\Kernel();
-        $kernel->setConfiguration(__DIR__ . "/../config/");
 
         $test = false;
         try {
+            $this->setSuperglobals();
             $_GET["_route"] = "test/security";
+            $kernel = new \Gephart\Framework\Kernel((new \Gephart\Http\RequestFactory())->createFromGlobals());
+            $kernel->setConfiguration(__DIR__ . "/../config/");
             $kernel->run();
         } catch (Exception $exception) {
             $test = true;
@@ -60,19 +64,36 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testSecurityGood()
     {
-        $kernel = new \Gephart\Framework\Kernel();
-        $kernel->setConfiguration(__DIR__ . "/../config/");
-
         $test = false;
+
         try {
+            $this->setSuperglobals();
+
             $_GET["_route"] = "test/login";
+            $kernel = new \Gephart\Framework\Kernel((new \Gephart\Http\RequestFactory())->createFromGlobals());
+            $kernel->setConfiguration(__DIR__ . "/../config/");
             $kernel->run();
 
             $_GET["_route"] = "test/security";
+            $kernel->registerRequest((new \Gephart\Http\RequestFactory())->createFromGlobals());
+
             $kernel->run();
+
             $test = true;
         } catch (Exception $exception) {}
 
         $this->assertTrue($test);
+    }
+
+    public function setSuperglobals()
+    {
+        $_GET = ["test" => "get"];
+        $_POST = ["test" => "post"];
+        $_COOKIE = ["test" => "cookie"];
+        $_SERVER['SERVER_PROTOCOL'] = "HTTP/1.0";
+        $_SERVER['SERVER_PORT'] = "80";
+        $_SERVER['SERVER_NAME'] = "www.gephart.cz";
+        $_SERVER['REQUEST_URI'] = "/index.html";
+        $_SERVER['REQUEST_METHOD'] = "GET";
     }
 }

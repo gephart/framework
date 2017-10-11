@@ -5,12 +5,13 @@ namespace Gephart\Framework\Debugging;
 use Gephart\EventManager\Event;
 use Gephart\EventManager\EventManager;
 use Gephart\Framework\Response\TemplateResponse;
+use Gephart\Framework\Response\TemplateResponseFactory;
 use Gephart\Routing\Router;
 
 class Debugger
 {
     /**
-     * @var TemplateResponse
+     * @var TemplateResponseFactory
      */
     private $response;
 
@@ -19,7 +20,7 @@ class Debugger
      */
     private $event_manager;
 
-    public function __construct(TemplateResponse $response, EventManager $event_manager)
+    public function __construct(TemplateResponseFactory $response, EventManager $event_manager)
     {
         $this->response = $response;
         $this->event_manager = $event_manager;
@@ -42,18 +43,22 @@ class Debugger
 
         $traces = explode("\n", $exception->getTraceAsString());
 
-        $response = $this->response->template("_framework/error/exception.html.twig", [
+        $response = $this->response->createResponse("_framework/error/exception.html.twig", [
             "file" => $file,
             "type" => $type,
             "errstr" => $errstr,
             "errfile" => $errfile,
             "errline" => $errline,
             "traces" => $traces
-        ])->render();
+        ], 500);
 
-        $response = $this->triggerReponseEvent($response);
+        $stream = $response->getBody();
+        $stream->rewind();
+        $body = $stream->getContents();
 
-        echo $response;
+        $body = $this->triggerReponseEvent($body);
+
+        echo $body;
         exit;
     }
 
@@ -81,24 +86,31 @@ class Debugger
 
         $file = file_get_contents($errfile);
 
-        $response = $this->response->template("_framework/error/error.html.twig", [
+        $response = $this->response->createResponse("_framework/error/error.html.twig", [
             "file" => $file,
             "type" => $type,
             "errstr" => $errstr,
             "errfile" => $errfile,
             "errline" => $errline
-        ])->render();
+        ]);
 
-        $response = $this->triggerReponseEvent($response);
+        $stream = $response->getBody();
+        $stream->rewind();
+        $body = $stream->getContents();
 
-        echo $response;
+        $body = $this->triggerReponseEvent($body);
+
+
+        $body = $this->triggerReponseEvent($body);
+
+        echo $body;
         exit;
     }
 
     private function triggerReponseEvent($response)
     {
         $event = new Event();
-        $event->setName(Router::RESPONSE_RENDER_EVENT);
+        $event->setName(TemplateResponseFactory::RESPONSE_RENDER_EVENT);
         $event->setParams([
             "response" => $response
         ]);

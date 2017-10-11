@@ -36,7 +36,8 @@ class SecurityListener
         SecurityReader $security_reader,
         SecurityConfiguration $security_configuration,
         Router $router
-    ) {
+    )
+    {
         $this->authenticator = $authenticator;
         $this->security_reader = $security_reader;
         $this->security_configuration = $security_configuration;

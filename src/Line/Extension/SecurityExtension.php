@@ -5,6 +5,7 @@ namespace Gephart\Framework\Line\Extension;
 use Gephart\Routing\Router;
 use Gephart\Security\Authenticator\Authenticator;
 use Gephart\Security\Configuration\SecurityConfiguration;
+use Gephart\Security\Entity\UserInterface;
 
 class SecurityExtension implements ExtensionInterface
 {
@@ -28,7 +29,8 @@ class SecurityExtension implements ExtensionInterface
         SecurityConfiguration $security_configuration,
         Authenticator $authenticator,
         Router $router
-    ) {
+    )
+    {
         $this->security_configuration = $security_configuration;
         $this->authenticator = $authenticator;
         $this->router = $router;
@@ -49,8 +51,9 @@ class SecurityExtension implements ExtensionInterface
 
     public function getContent()
     {
-        if ($user = $this->authenticator->getUser()) {
-            $content = "Roles: [" . implode(",", $user->getRoles()) . "]<br/>";
+        $user = $this->authenticator->getUser();
+        if ($user instanceof UserInterface) {
+            $content = "Roles: [" . implode(",",$user->getRoles()) . "]<br/>";
 
             if ($logout = $this->security_configuration->get("logout")) {
                 $url = $this->router->generateUrl($logout);
@@ -59,7 +62,8 @@ class SecurityExtension implements ExtensionInterface
 
             return $content;
         } else {
-            if ($login = $this->security_configuration->get("login")) {
+            $login = $this->security_configuration->get("login");
+            if ($login) {
                 $url = $this->router->generateUrl($login);
                 return "<a href='$url'>Login</a>";
             }

@@ -39,7 +39,7 @@ class ListenersExtension implements ExtensionInterface
                 </tr>
         ";
 
-        foreach ($listeners as $listener) :
+        foreach ($listeners as $listener):
             $content .= "
                 <tr>
                     <td>".$listener["event"]."</td>

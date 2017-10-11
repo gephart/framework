@@ -6,6 +6,7 @@ use Gephart\EventManager\EventManager;
 use Gephart\Framework\Configuration\FrameworkConfiguration;
 use Gephart\Request\Request;
 use Gephart\Routing\Router;
+use Psr\Http\Message\ServerRequestInterface;
 
 class CacheExtension implements ExtensionInterface
 {
@@ -20,10 +21,11 @@ class CacheExtension implements ExtensionInterface
     private $framework_configuration;
 
     public function __construct(
-        Request $request,
+        ServerRequestInterface $request,
         FrameworkConfiguration $framework_configuration,
         EventManager $event_manager
-    ) {
+    )
+    {
         $this->request = $request;
         $this->framework_configuration = $framework_configuration;
 
@@ -77,6 +79,7 @@ class CacheExtension implements ExtensionInterface
     }
 </script>
 END;
+
     }
 
     public function getIcon()
@@ -155,8 +158,7 @@ END;
         exit;
     }
 
-    private function deleteDir($dir, $remove_self = true)
-    {
+    private function deleteDir($dir, $remove_self = true) {
         $files = array_diff(scandir($dir), ['.','..']);
 
         foreach ($files as $file) {

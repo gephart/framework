@@ -5,7 +5,7 @@ namespace Gephart\Framework\Line\EventListener;
 use Gephart\EventManager\Event;
 use Gephart\EventManager\EventManager;
 use Gephart\Framework\Line\Controller\LineController;
-use Gephart\Routing\Router;
+use Gephart\Framework\Response\TemplateResponseFactory;
 
 class ResponseListener
 {
@@ -18,7 +18,7 @@ class ResponseListener
     {
         $this->line_controller = $line_controller;
 
-        $event_manager->attach(Router::RESPONSE_RENDER_EVENT, [$this, "responseRender"]);
+        $event_manager->attach(TemplateResponseFactory::RESPONSE_RENDER_EVENT, [$this, "responseRender"]);
     }
 
     public function responseRender(Event $event)

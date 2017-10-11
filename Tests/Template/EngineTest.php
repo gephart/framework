@@ -12,6 +12,8 @@ class EngineTest extends \PHPUnit\Framework\TestCase
         $configuration = $container->get(\Gephart\Configuration\Configuration::class);
         $configuration->setDirectory(__DIR__ . "/../engine-files/config/");
 
+        $container->register((new \Gephart\Http\RequestFactory())->createFromGlobals(), \Psr\Http\Message\ServerRequestInterface::class);
+
         $this->container = $container;
     }
 

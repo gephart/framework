@@ -28,9 +28,7 @@ class Scripts
 
         if ($handle = opendir($from)) {
             while (false !== ($entry = readdir($handle))) {
-                if ($entry == "." || $entry == "..") {
-                    continue;
-                }
+                if ($entry == "." || $entry == "..") continue;
 
                 if (is_dir($from . "/" . $entry)) {
                     @mkdir($to . "/" . $entry, 0777);

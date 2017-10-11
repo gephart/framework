@@ -5,8 +5,12 @@ namespace Gephart\Framework;
 use Gephart\Configuration\Configuration;
 use Gephart\DependencyInjection\Container;
 use Gephart\EventManager\EventManager;
+use Gephart\Framework\Debugging\Debugger;
 use Gephart\Framework\EventListener\SecurityListener;
+use Gephart\Framework\Line\EventListener\ResponseListener;
 use Gephart\Routing\Router;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class Kernel
 {
@@ -35,7 +39,7 @@ class Kernel
      */
     protected $eventManager;
 
-    public function __construct()
+    public function __construct(ServerRequestInterface $request)
     {
         $this->container = new Container();
         $this->configuration = $this->container->get(Configuration::class);
@@ -47,6 +51,8 @@ class Kernel
         if (is_dir($config_dir)) {
             $this->setConfiguration($config_dir);
         }
+
+        $this->registerRequest($request);
     }
 
     public function setConfiguration(string $dir)
@@ -59,6 +65,11 @@ class Kernel
         $this->environment = $environment;
     }
 
+    public function registerRequest(ServerRequestInterface $request)
+    {
+        $this->container->register($request, ServerRequestInterface::class);
+    }
+
     public function registerServices(array $services, string $environment = "")
     {
         if (empty($environment) || $environment == $this->environment) {
@@ -68,13 +79,13 @@ class Kernel
         }
     }
 
-    public function run()
+    public function run(): ResponseInterface
     {
         $this->eventManager->trigger(self::RUN_EVENT, $this);
 
         $this->registerServices([
-            \Gephart\Framework\Debugging\Debugger::class,
-            \Gephart\Framework\Line\EventListener\ResponseListener::class
+            Debugger::class,
+            ResponseListener::class
         ], self::DEV_ENVIRONMENT);
 
         $this->registerServices([
@@ -82,7 +93,7 @@ class Kernel
         ]);
 
         $router = $this->container->get(Router::class);
-        $router->run();
+        return $router->run();
     }
 
     protected function autodetectEnvironment()
@@ -95,5 +106,21 @@ class Kernel
         } else {
             $this->setEnvironment(Kernel::PROD_ENVIRONMENT);
         }
+    }
+
+    public function render(ResponseInterface $response): string
+    {
+        http_response_code($response->getStatusCode());
+
+        $headers = $response->getHeaders();
+        foreach ($headers as $headerName => $headerParams) {
+            header($headerName . ": " . implode(",", $headersParams));
+        }
+
+        $stream = $response->getBody();
+        $stream->rewind();
+        $body = $stream->getContents();
+
+        return $body;
     }
 }

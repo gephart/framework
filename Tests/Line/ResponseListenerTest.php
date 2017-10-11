@@ -8,9 +8,12 @@ class ResponseListenerTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
+        $this->setSuperglobals();
+
         $container = new \Gephart\DependencyInjection\Container();
         $configuration = $container->get(\Gephart\Configuration\Configuration::class);
         $configuration->setDirectory(__DIR__ . "/../config/");
+        $container->register((new \Gephart\Http\RequestFactory())->createFromGlobals(), \Psr\Http\Message\ServerRequestInterface::class);
         $container->get(\Gephart\Framework\Line\EventListener\ResponseListener::class);
 
         /** @var \Gephart\Quality\Checker $quality_checker */
@@ -26,7 +29,7 @@ class ResponseListenerTest extends \PHPUnit\Framework\TestCase
         $event_manager = $this->container->get(\Gephart\EventManager\EventManager::class);
 
         $event = new \Gephart\EventManager\Event();
-        $event->setName(\Gephart\Routing\Router::RESPONSE_RENDER_EVENT);
+        $event->setName(\Gephart\Framework\Response\TemplateResponseFactory::RESPONSE_RENDER_EVENT);
         $event->setParams([
             "response" => "<body></body>"
         ]);
@@ -45,7 +48,7 @@ class ResponseListenerTest extends \PHPUnit\Framework\TestCase
         $event_manager = $this->container->get(\Gephart\EventManager\EventManager::class);
 
         $event = new \Gephart\EventManager\Event();
-        $event->setName(\Gephart\Routing\Router::RESPONSE_RENDER_EVENT);
+        $event->setName(\Gephart\Framework\Response\TemplateResponseFactory::RESPONSE_RENDER_EVENT);
         $event->setParams([
             "response" => null
         ]);
@@ -55,5 +58,17 @@ class ResponseListenerTest extends \PHPUnit\Framework\TestCase
         $response = $event->getParam("response");
 
         $this->assertTrue($response == null);
+    }
+
+    public function setSuperglobals()
+    {
+        $_GET = ["test" => "get"];
+        $_POST = ["test" => "post"];
+        $_COOKIE = ["test" => "cookie"];
+        $_SERVER['SERVER_PROTOCOL'] = "HTTP/1.0";
+        $_SERVER['SERVER_PORT'] = "80";
+        $_SERVER['SERVER_NAME'] = "www.gephart.cz";
+        $_SERVER['REQUEST_URI'] = "/index.html";
+        $_SERVER['REQUEST_METHOD'] = "GET";
     }
 }

@@ -40,7 +40,7 @@ class RoutesExtension implements ExtensionInterface
                 </tr>
         ";
 
-        foreach ($routes as $route) :
+        foreach ($routes as $route):
             $content .= "
                 <tr>
                     <td>".$route->getRule()."</td>
