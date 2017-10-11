@@ -35,7 +35,7 @@ class TemplateResponseFactory
         $body = $this->engine->render($template, $data);
         $body = $this->triggerResponseRender($body);
 
-        $stream = new Stream("php://temp","rw");
+        $stream = new Stream("php://temp", "rw");
         $stream->write($body);
 
         $response = new Response($stream, $statusCode, $headers);
@@ -67,5 +67,4 @@ class TemplateResponseFactory
 
         return $event->getParam("data");
     }
-
 }

@@ -39,8 +39,7 @@ class LineController
     public function __construct(
         Container $container,
         Engine $engine
-    )
-    {
+    ) {
         $this->container = $container;
         $this->engine = $engine;
         $this->extensions = [];
