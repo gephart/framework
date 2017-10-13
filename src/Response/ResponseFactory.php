@@ -39,7 +39,7 @@ class ResponseFactory
         return $this->jsonResponseFactory->createResponse(...$params);
     }
 
-    public function teyt(...$params)
+    public function text(...$params)
     {
         return $this->textResponseFactory->createResponse(...$params);
     }
