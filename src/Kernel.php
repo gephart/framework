@@ -7,6 +7,7 @@ use Gephart\DependencyInjection\Container;
 use Gephart\EventManager\EventManager;
 use Gephart\Framework\Debugging\Debugger;
 use Gephart\Framework\EventListener\SecurityListener;
+use Gephart\Framework\Facade\Facade;
 use Gephart\Framework\Line\EventListener\ResponseListener;
 use Gephart\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
@@ -53,6 +54,7 @@ class Kernel
         }
 
         $this->registerRequest($request);
+        $this->setFacades();
     }
 
     public function setConfiguration(string $dir)
@@ -106,6 +108,11 @@ class Kernel
         } else {
             $this->setEnvironment(Kernel::PROD_ENVIRONMENT);
         }
+    }
+
+    protected function setFacades()
+    {
+        Facade::setDIContainer($this->container);
     }
 
     public function render(ResponseInterface $response): string
