@@ -136,7 +136,10 @@ END;
 
     public function clearAction()
     {
-        if ($this->request->get("_line-action") != "clear-cache") {
+        $params = $this->request->getQueryParams();
+        if (empty($params["_line-action"]) || (
+                !empty($params["_line-action"]) && $params["_line-action"] != "clear-cache"
+            )) {
             return;
         }
 
