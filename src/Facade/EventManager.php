@@ -6,6 +6,6 @@ class EventManager extends Facade
 {
     public static function getAccessor()
     {
-        return \Gephart\EventManager\EventManagera::class;
+        return \Gephart\EventManager\EventManager::class;
     }
 }
