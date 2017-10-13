@@ -4,7 +4,7 @@ namespace Gephart\Framework\Facade;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-class Response extends Facade
+class Request extends Facade
 {
     public static function getAccessor()
     {
