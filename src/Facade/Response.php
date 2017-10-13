@@ -6,7 +6,7 @@ use Gephart\Framework\Response\ResponseFactory;
 
 class Response extends Facade
 {
-    static function getAccessor()
+    public static function getAccessor()
     {
         return ResponseFactory::class;
     }

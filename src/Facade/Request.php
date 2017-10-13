@@ -6,7 +6,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Response extends Facade
 {
-    static function getAccessor()
+    public static function getAccessor()
     {
         return ServerRequestInterface::class;
     }

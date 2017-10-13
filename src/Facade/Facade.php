@@ -12,17 +12,17 @@ class Facade
      */
     protected static $container;
 
-    static function getAccessor()
+    public static function getAccessor()
     {
         throw new \RuntimeException("Facade must be implmented with method 'getAccessor'");
     }
 
-    static function setDIContainer(Container $container)
+    public static function setDIContainer(Container $container)
     {
         static::$container = $container;
     }
 
-    static function __callStatic($name, $arguments)
+    public static function __callStatic($name, $arguments)
     {
         $accessor = static::getAccessor();
         $instance = self::$container->get($accessor);

@@ -23,8 +23,7 @@ class ResponseFactory
         TemplateResponseFactory $templateResponseFactory,
         JsonResponseFactory $jsonResponseFactory,
         TextResponseFactory $textResponseFactory
-    )
-    {
+    ) {
         $this->templateResponseFactory = $templateResponseFactory;
         $this->jsonResponseFactory = $jsonResponseFactory;
         $this->textResponseFactory = $textResponseFactory;
