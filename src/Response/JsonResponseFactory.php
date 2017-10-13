@@ -23,7 +23,7 @@ class JsonResponseFactory
 
     public function createResponse($content, int $statusCode = 200, $headers = [])
     {
-        $body = json_decode($content);
+        $body = json_encode($content);
         $body = $this->triggerResponseRender($body);
 
         $stream = new Stream("php://temp", "rw");
