@@ -72,6 +72,8 @@ class Engine
 
         $twig = new \Twig_Environment($loader, $options);
 
+        $twig->addExtension(new \Twig_Extension_StringLoader());
+
         $this->registerBasicFunctions($twig);
 
         return $twig;
