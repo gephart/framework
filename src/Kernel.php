@@ -121,7 +121,7 @@ class Kernel
 
         $headers = $response->getHeaders();
         foreach ($headers as $headerName => $headerParams) {
-            header($headerName . ": " . implode(",", $headersParams));
+            header($headerName . ": " . implode(",", $headerParams));
         }
 
         $stream = $response->getBody();
