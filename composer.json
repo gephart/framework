@@ -25,7 +25,7 @@
     "gephart/routing": "0.5.*",
     "gephart/security": "0.5.*",
     "gephart/sessions": "0.5.*",
-    "twig/twig": "~2.4.3"
+    "twig/twig": "~2.15.2"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "3.*"
