@@ -24,8 +24,7 @@ class CacheExtension implements ExtensionInterface
         ServerRequestInterface $request,
         FrameworkConfiguration $framework_configuration,
         EventManager $event_manager
-    )
-    {
+    ) {
         $this->request = $request;
         $this->framework_configuration = $framework_configuration;
 
@@ -79,7 +78,6 @@ class CacheExtension implements ExtensionInterface
     }
 </script>
 END;
-
     }
 
     public function getIcon()
@@ -161,7 +159,8 @@ END;
         exit;
     }
 
-    private function deleteDir($dir, $remove_self = true) {
+    private function deleteDir($dir, $remove_self = true)
+    {
         $files = array_diff(scandir($dir), ['.','..']);
 
         foreach ($files as $file) {

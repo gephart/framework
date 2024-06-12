@@ -6,7 +6,7 @@ class ResponseListenerTest extends \PHPUnit\Framework\TestCase
 {
     private $container;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->setSuperglobals();
 

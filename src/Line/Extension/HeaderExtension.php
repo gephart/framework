@@ -20,7 +20,7 @@ class HeaderExtension implements ExtensionInterface
 
         $content = "<table>";
 
-        foreach (headers_list() as $header):
+        foreach (headers_list() as $header) :
             $content .= "
                 <tr>
                     <td>".explode(":", $header)[0]."</td>

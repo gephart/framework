@@ -29,8 +29,7 @@ class SecurityExtension implements ExtensionInterface
         SecurityConfiguration $security_configuration,
         Authenticator $authenticator,
         Router $router
-    )
-    {
+    ) {
         $this->security_configuration = $security_configuration;
         $this->authenticator = $authenticator;
         $this->router = $router;
@@ -53,7 +52,7 @@ class SecurityExtension implements ExtensionInterface
     {
         $user = $this->authenticator->getUser();
         if ($user instanceof UserInterface) {
-            $content = "Roles: [" . implode(",",$user->getRoles()) . "]<br/>";
+            $content = "Roles: [" . implode(",", $user->getRoles()) . "]<br/>";
 
             if ($logout = $this->security_configuration->get("logout")) {
                 $url = $this->router->generateUrl($logout);

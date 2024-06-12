@@ -21,7 +21,8 @@ class TimerExtension implements ExtensionInterface
 
     public function getTitle()
     {
-        return "Time: <strong>" . number_format((microtime(true) - $this->microtime) * 1000, 0, " ", ".") . "ms</strong>";
+        $time = number_format((microtime(true) - $this->microtime) * 1000, 0, " ", ".");
+        return "Time: <strong>" . $time . "ms</strong>";
     }
 
     public function getContent()

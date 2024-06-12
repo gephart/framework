@@ -4,8 +4,8 @@ namespace Gephart\Framework\Composer;
 
 class Scripts
 {
-    static public $skeleton_dir;
-    static public $target_dir;
+    public static $skeleton_dir;
+    public static $target_dir;
 
     public static function install()
     {

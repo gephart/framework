@@ -7,7 +7,7 @@ class TemplateResponseTest extends \PHPUnit\Framework\TestCase
     /** @var \Gephart\Framework\Response\TemplateResponseFactory $response */
     private $response;
 
-    public function setUp()
+    public function setUp(): void
     {
         $container = new \Gephart\DependencyInjection\Container();
         $configuration = $container->get(\Gephart\Configuration\Configuration::class);
