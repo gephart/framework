@@ -76,10 +76,7 @@ class LineController
     {
         $extensions = $this->extensions;
         usort($extensions, function (ExtensionInterface $a, ExtensionInterface $b) {
-            if ($a->getPriority() < $b->getPriority()) {
-                return true;
-            }
-            return false;
+            return $a->getPriority() <=> $b->getPriority();
         });
 
         $base64_encode = function ($string) {
