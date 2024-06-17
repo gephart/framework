@@ -51,7 +51,7 @@ class LineController
         $this->registerExtension(ListenersExtension::class);
         $this->registerExtension(TimerExtension::class);
         $this->registerExtension(SecurityExtension::class);
-        $this->registerExtension(QualityExtension::class);
+        //$this->registerExtension(QualityExtension::class);
     }
 
     public function registerExtension(string $extension_classname)
