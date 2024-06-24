@@ -61,29 +61,20 @@ class SecurityListener
 
         if ($must_have_role && !$this->authenticator->isGranted($must_have_role)) {
             $login = $this->security_configuration->get("login");
-            if ($login && !$this->authenticator->getUser()) {
-                if ($isJson) {
-                    http_response_code(403);
-                    echo json_encode([
-                        "message" => "Neoprávněný přístup.",
-                        "code" => 403
-                    ], 403);
-                    exit;
-                }
+            if ($isJson) {
+                http_response_code(403);
+                echo json_encode([
+                    "message" => "Neoprávněný přístup.",
+                    "code" => 403
+                ], 403);
+                exit;
+            }
 
+            if ($login && !$this->authenticator->getUser()) {
                 $url = $this->router->generateUrl($login);
                 @header("location: $url");
                 exit;
             } else {
-                if ($isJson) {
-                    http_response_code(403);
-                    echo json_encode([
-                        "message" => "Neoprávněný přístup.",
-                        "code" => 403
-                    ]);
-                    exit;
-                }
-
                 @header('HTTP/1.0 403 Forbidden');
                 throw new \Exception("403 Forbidden");
             }
