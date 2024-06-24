@@ -79,8 +79,8 @@ class SecurityListener
                     http_response_code(403);
                     echo json_encode([
                         "message" => "Neoprávněný přístup.",
-                        "code" => 430
-                    ], 430);
+                        "code" => 403
+                    ]);
                     exit;
                 }
 
