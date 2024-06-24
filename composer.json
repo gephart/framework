@@ -23,7 +23,7 @@
     "gephart/orm": "0.5.*",
     "gephart/http": "0.5.*",
     "gephart/routing": "0.5.*",
-    "gephart/security": "0.5.*",
+    "gephart/security": "0.6.*",
     "gephart/sessions": "0.5.*",
     "twig/twig": "~2.15.2"
   },
