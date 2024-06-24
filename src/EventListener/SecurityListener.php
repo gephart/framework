@@ -4,6 +4,7 @@ namespace Gephart\Framework\EventListener;
 
 use Gephart\EventManager\Event;
 use Gephart\EventManager\EventManager;
+use Gephart\Framework\Facade\Request;
 use Gephart\Routing\Router;
 use Gephart\Security\Authenticator\Authenticator;
 use Gephart\Security\Configuration\SecurityConfiguration;
@@ -50,15 +51,39 @@ class SecurityListener
         $controller = $event->getParam("controller");
         $action = $event->getParam("action");
 
+
+        $headers = Request::getHeaders();
+        $isJson = !empty($headers["content-type"])
+            && !empty($headers["content-type"][0])
+            && strpos($headers["content-type"][0], "/json") !== false;
+
         $must_have_role = $this->security_reader->getMustHaveRole($controller, $action);
 
         if ($must_have_role && !$this->authenticator->isGranted($must_have_role)) {
             $login = $this->security_configuration->get("login");
             if ($login && !$this->authenticator->getUser()) {
+                if ($isJson) {
+                    http_response_code(403);
+                    echo json_encode([
+                        "message" => "Neoprávněný přístup.",
+                        "code" => 403
+                    ], 403);
+                    exit;
+                }
+
                 $url = $this->router->generateUrl($login);
                 @header("location: $url");
                 exit;
             } else {
+                if ($isJson) {
+                    http_response_code(403);
+                    echo json_encode([
+                        "message" => "Neoprávněný přístup.",
+                        "code" => 430
+                    ], 430);
+                    exit;
+                }
+
                 @header('HTTP/1.0 403 Forbidden');
                 throw new \Exception("403 Forbidden");
             }
